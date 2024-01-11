@@ -1,0 +1,90 @@
+
+---
+openapi: 3.0.3
+info:
+  title: Service
+  version: 1.0.0
+  description: API service
+servers:
+  - url: http://localhost:8080
+    description: Service
+paths:
+  /resource:
+    post:
+      summary: "Create a resource"
+      operationId: "Create"
+      tags:
+        - "resource"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: "Delete a resource"
+      operationId: "Delete"
+      tags:
+        - "resource"
+      parameters:
+        - name: "id"
+          in: "query"
+          description: "ID of resource to delete"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Resource:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - description
+        - created_at
+        - updated_at
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+      required:
+        - code
+        - message

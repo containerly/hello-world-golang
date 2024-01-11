@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Function to check if the file exists
+check_file_exists() {
+    if [ ! -f "$1" ]; then
+        echo "File not found: $1"
+        exit 1
+    fi
+}
+
+# Ask for input on various properties
+read -p "Enter the path to your OpenAPI spec file: " spec_path
+check_file_exists "${spec_path}"
+
+read -p "Enter the output directory for the generated code: " output_dir
+read -p "Enter your base package name: " package_name
+read -p "Enter your model package name: " model_package
+read -p "Enter your API package name: " api_package
+read -p "Enter your server port (e.g., 8080): " server_port
+
+additional_properties="packageName=${package_name},modelPackage=${model_package},apiPackage=${api_package},serverPort=${server_port}"
+
+docker pull openapitools/openapi-generator-cli
+
+# Run OpenAPI Generator
+openapi-generator-cli generate \
+    -i "${spec_path}" \
+    -g go-server \
+    -o "${output_dir}" \
+    --additional-properties="${additional_properties}"
+
+echo "Generation complete. Files are in ${output_dir}"

@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  description: API service
+  title: Service
+  version: 1.0.0
+servers:
+- description: Service
+  url: http://localhost:8080
+paths:
+  /resource:
+    delete:
+      operationId: Delete
+      parameters:
+      - description: ID of resource to delete
+        explode: true
+        in: query
+        name: id
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Delete a resource
+      tags:
+      - resource
+    post:
+      operationId: Create
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Create a resource
+      tags:
+      - resource
+components:
+  schemas:
+    Resource:
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        name: name
+        description: description
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - created_at
+      - description
+      - id
+      - name
+      - updated_at
+      type: object
+    Error:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      required:
+      - code
+      - message
+      type: object
